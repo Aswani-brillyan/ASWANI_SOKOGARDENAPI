@@ -1,10 +1,13 @@
 from flask import *
 import pymysql 
 import os
+from flask_cors import CORS
 
 
 
 app=Flask(__name__)
+CORS(app)
+
 app.config["UPLOAD_FOLDER"]= 'static/images'
 
 @app.route("/api/signup",methods=["POST"])
@@ -17,7 +20,7 @@ def signup():
 
     print(username,email,phone,password)
     # created db connection
-    connection = pymysql.connect(host='localhost',user='root',password='',database="aswani_sokogarden")
+    connection = pymysql.connect(host='mysql-aswanibrillyan.alwaysdata.net',user='aswanibrillyan',password="modcom2026",database="aswanibrillyan_sokogarden")
     # create cursor
     cursor=connection.cursor()
     # create sql query
@@ -38,7 +41,7 @@ def login():
     password= request.form["password"]
     print(email,password)
 
-    connection=pymysql.connect(host="localhost",user="root",password="",database="aswani_sokogarden")
+    connection=pymysql.connect(host="mysql-aswanibrillyan.alwaysdata.net",user="aswanibrillyan",password="modcom2026",database="aswanibrillyan_sokogarden")
                     
     cursor=connection.cursor(pymysql.cursors.DictCursor)
     sql="select user_id,username,email,phone from users where email= %s and password= %s"
@@ -58,7 +61,7 @@ def addProduct():
     product_description=request.form["product_description"]
     product_category=request.form["product_category"]
     product_cost=request.form["product_cost"]
-    product_image=request.files["product_image"]
+    product_image=request.filesz["product_image"]
 
     print(product_name,product_description,product_category,product_cost,product_image)
      # get product name
@@ -67,7 +70,7 @@ def addProduct():
     # save images to the images folder
     file_path=os.path.join(app.config['UPLOAD_FOLDER'],image_name)
     product_image.save(file_path)
-    connection=pymysql.connect(host="localhost",user="root",password="",database="aswani_sokogarden")
+    connection=pymysql.connect(host="mysql-aswanibrillyan.alwaysdata.net",user="aswanibrillyan",password="modcom2026",database="aswanibrillyan_sokogarden")
     cursor=connection.cursor()
     # sql to execute
     sql="insert into product_details (product_name, product_description, product_category, product_cost, product_image) values (%s,%s,%s,%s,%s)"
@@ -82,7 +85,7 @@ def addProduct():
 @app.route("/api/get_products",methods=['GET'])
 def getProducts():
     # create a connection
-    connection=pymysql.connect(host="localhost",user="root",password="",database="aswani_sokogarden")
+    connection=pymysql.connect(host="mysql-aswanibrillyan.alwaysdata.net",user="aswanibrillyan",password="modcom2026",database="aswanibrillyan_sokogarden")
     # create a cursor
     cursor=connection.cursor(pymysql.cursors.DictCursor)
     # 
@@ -159,5 +162,5 @@ def mpesa_payment():
 
 
 
-if __name__=="__main__":
-        app.run(debug=True)
+# if __name__=="__main__":
+#         app.run(debug=True)
